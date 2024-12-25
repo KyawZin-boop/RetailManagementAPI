@@ -25,15 +25,16 @@ namespace BAL.Services
             try
             {
                 var products = await _unitOfWork.Product.GetByCondition(x => x.ActiveFlag);
-                if(products is null)
+                if (products is null)
                 {
                     throw new Exception("No products found");
                 }
 
                 return products;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                
                 throw ex;
             }
         }
@@ -89,7 +90,7 @@ namespace BAL.Services
                 }
 
                 product.ActiveFlag = false;
-                _unitOfWork.Product.ChangeActive(product);
+                _unitOfWork.Product.Update(product);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -103,7 +104,7 @@ namespace BAL.Services
             try
             {
                 var product = (await _unitOfWork.Product.GetByCondition(x => x.Id == inputModel.Id && x.ActiveFlag)).FirstOrDefault();
-                if(product == null)
+                if (product == null)
                 {
                     throw new Exception("Product not found");
                 }
@@ -128,7 +129,7 @@ namespace BAL.Services
             try
             {
                 var product = (await _unitOfWork.Product.GetByCondition(x => x.ProductCode == inputModel.ProductCode && x.ActiveFlag)).FirstOrDefault();
-                if(product is null)
+                if (product is null)
                 {
                     throw new Exception("Product not found");
                 }
@@ -151,16 +152,49 @@ namespace BAL.Services
             try
             {
                 var lst = await _unitOfWork.Cart.GetAll();
-                if(lst is null)
+                if (lst is null)
                 {
-                    throw new Exception("No item in Cart"); 
+                    throw new Exception("No item in Cart");
                 }
 
                 return lst;
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task FinalizeCart()
+        {
+            try
+            {
+                foreach (var cart in carts)
+                {
+                    var product = (await _unitOfWork.Product.GetByCondition(x => x.ProductCode == cart.ProductCode && x.ActiveFlag)).FirstOrDefault();
+                    if (product is null)
+                    {
+                        throw new Exception("Product not found");
+                    }
+                    product.Stock -= cart.Quantity;
+                    _unitOfWork.Product.Update(product);
+                    var report = new SaleReport
+                    {
+                        ProductCode = product.ProductCode,
+                        ProductName = product.Name,
+                        Quantity = cart.Quantity,
+                        SellingPrice = product.Price,
+                        TotalPrice = product.Price * cart.Quantity,
+                        Profit = product.ProfitPerItem * cart.Quantity
+                    };
+                     await _unitOfWork.SaleReport.Add(report);
+                }
+                carts.Clear();
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

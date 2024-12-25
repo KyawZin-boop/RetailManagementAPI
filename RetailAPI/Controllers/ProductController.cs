@@ -118,6 +118,20 @@ namespace RetailAPI.Controllers
                 return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
             }
         }
+
+        [HttpPost("FinalizeCart")]
+        public async Task<IActionResult> FinalizeCart()
+        {
+            try
+            {
+                await _productService.FinalizeCart();
+                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+            }
+        }
     }
     
 }

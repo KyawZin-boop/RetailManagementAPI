@@ -14,7 +14,6 @@ namespace Repository.Repositories
         Task<T?> GetByGuid(Guid guid);
         Task<T?> GetById(int id);
         void Delete(T entity);
-        void ChangeActive(T entity);
         void Update(T entity);
         Task<IEnumerable<T>> GetByCondition(Expression<Func<T, bool>> expression);
     }

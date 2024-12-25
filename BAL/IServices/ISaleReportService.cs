@@ -9,6 +9,8 @@ namespace BAL.IServices
 {
     public interface ISaleReportService
     {
-        Task AddSaleReport(SaleReportDTO inputModel);
+        //Task AddSaleReport(SaleReportDTO inputModel);
+        Task GetSaleReport();
+        Task GetSaleReportById(Guid id);
     }
 }

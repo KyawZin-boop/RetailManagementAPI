@@ -11,6 +11,7 @@ using Model;
 using Model.AppConfig;
 using Repository.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Repository.Repositories.IRepositories;
 
 namespace BAL.Shared
 {

@@ -29,11 +29,8 @@ namespace Repository.Repositories
             await _entities.AddAsync(entity);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
-        {
-            return await _entities.ToListAsync();
-        }
-
+        public async Task<IEnumerable<T>> GetAll() => await _entities.ToListAsync();
+        
         public async Task<T?> GetById(int id) => await _entities.FindAsync(id);
 
         public async Task<T?> GetByGuid(Guid guid) => await _entities.FindAsync(guid);
@@ -56,14 +53,6 @@ namespace Repository.Repositories
             }
 
             _entities.Remove(entity);
-        }
-        public void ChangeActive(T entity)
-        {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-            _entities.Update(entity);
         }
 
         public async Task<IEnumerable<T>> GetByCondition(Expression<Func<T, bool>> expression)

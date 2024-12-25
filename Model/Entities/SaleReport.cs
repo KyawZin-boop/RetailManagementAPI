@@ -10,7 +10,7 @@ using Model.AppConfig;
 namespace Model.Entities
 {
     [Table("Tbl_SaleReport")]
-    public class SaleReport : Common
+    public class SaleReport
     {
         [Key]
         public Guid SaleId { get; set; }
@@ -18,6 +18,7 @@ namespace Model.Entities
         public string ProductName { get; set; }
         public int Quantity { get; set; }
         public decimal SellingPrice { get; set; }
-        public decimal Total { get; set; }
+        public decimal Profit { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

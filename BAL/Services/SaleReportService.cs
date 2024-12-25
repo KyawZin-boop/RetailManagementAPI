@@ -20,22 +20,55 @@ namespace BAL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddSaleReport(SaleReportDTO inputModel)
+        //public async Task AddSaleReport(Product product, int Quantity)
+        //{
+        //    try
+        //    {
+        //        var saleReport = new SaleReport
+        //        {
+        //            ProductCode = product.ProductCode,
+        //            ProductName = product.Name,
+        //            Quantity = Quantity,
+        //            SellingPrice = product.Price,
+        //            TotalPrice = product.Price * Quantity,
+        //            Profit = product.ProfitPerItem * Quantity
+        //        };
+        //        await _unitOfWork.SaleReport.Add(saleReport);
+        //        await _unitOfWork.SaveChangesAsync();
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
+        public async Task GetSaleReport()
         {
             try
             {
-                var saleReport = new SaleReport
+                var saleReports = await _unitOfWork.SaleReport.GetAll();
+                if (saleReports is null)
                 {
-                    ProductCode = inputModel.ProductCode,
-                    ProductName = inputModel.ProductName,
-                    Quantity = inputModel.Quantity,
-                    SellingPrice = inputModel.SellingPrice,
-                    Total = inputModel.Total
-                };
-                await _unitOfWork.SaleReport.Add(saleReport);
-                await _unitOfWork.SaveChangesAsync();
+                    throw new Exception("No sale reports found");
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task GetSaleReportById(Guid id)
+        {
+            try
+            {
+                var saleReports = await _unitOfWork.SaleReport.GetByCondition(x => x.SaleId == id);
+                if (saleReports is null)
+                {
+                    throw new Exception("No sale reports found");
+                }
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
