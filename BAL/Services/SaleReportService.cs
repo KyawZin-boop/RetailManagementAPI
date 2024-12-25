@@ -11,9 +11,10 @@ using Repository.UnitOfWork;
 
 namespace BAL.Services
 {
-    internal class SaleReportService : ISaleReportService
+    internal class SaleReportService :  ISaleReportService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly Summary Summary = new Summary();
 
         public SaleReportService(IUnitOfWork unitOfWork)
         {
@@ -42,7 +43,7 @@ namespace BAL.Services
         //    }
         //}
 
-        public async Task GetSaleReport()
+        public async Task<IEnumerable<SaleReport>> GetSaleReport()
         {
             try
             {
@@ -51,6 +52,8 @@ namespace BAL.Services
                 {
                     throw new Exception("No sale reports found");
                 }
+
+                return saleReports;
             }
             catch (Exception ex)
             {
@@ -58,19 +61,44 @@ namespace BAL.Services
             }
         }
 
-        public async Task GetSaleReportById(Guid id)
+        public async Task<SaleReport> GetSaleReportById(Guid id)
         {
             try
             {
-                var saleReports = await _unitOfWork.SaleReport.GetByCondition(x => x.SaleId == id);
-                if (saleReports is null)
+                var saleReport = (await _unitOfWork.SaleReport.GetByCondition(x => x.SaleId == id)).FirstOrDefault();
+                if (saleReport is null)
                 {
                     throw new Exception("No sale reports found");
                 }
+
+                return saleReport;
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public async Task<Summary> GetTotalSummary()
+        {
+            try
+            {
+                var saleReports = await _unitOfWork.SaleReport.GetAll();
+                if(saleReports is null)
+                {
+                    throw new Exception("No sale reports found");
+                }
+
+                foreach (var report in saleReports)
+                {
+                    Summary.TotalProfit += report.Profit;
+                    Summary.TotalRevenue += report.TotalPrice;
+                }
+                return Summary;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }

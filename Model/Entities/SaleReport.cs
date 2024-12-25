@@ -21,4 +21,10 @@ namespace Model.Entities
         public decimal Profit { get; set; }
         public decimal TotalPrice { get; set; }
     }
+
+    public class Summary
+    {
+        public decimal TotalRevenue { get; set; }
+        public decimal TotalProfit { get; set; }
+    }
 }

@@ -21,6 +21,7 @@ namespace Repository.UnitOfWork
             _dataContext = dataContext;
             AppSettings = appsettings.Value;
             Product = new ProductRepository(dataContext);
+            Cart = new CartRepository(dataContext);
             SaleReport = new SaleReportRepository(dataContext);
         }
 
