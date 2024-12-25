@@ -30,13 +30,21 @@ namespace BAL.Services
                     throw new Exception("Product not found");
                 }
 
-                var cart = new Cart
+                var cartItem = carts.FirstOrDefault(x => x.ProductCode == inputModel.ProductCode);
+                if(cartItem is null)
                 {
-                    ProductCode = inputModel.ProductCode,
-                    ProductName = inputModel.ProductName,
-                    Quantity = inputModel.Quantity
-                };
-                carts.Add(cart);
+                    var cart = new Cart
+                    {
+                        ProductCode = inputModel.ProductCode,
+                        ProductName = inputModel.ProductName,
+                        Quantity = inputModel.Quantity
+                    };
+                    carts.Add(cart);
+                }
+                else
+                {
+                    cartItem.Quantity += inputModel.Quantity;
+                }
             }
             catch (Exception ex)
             {
