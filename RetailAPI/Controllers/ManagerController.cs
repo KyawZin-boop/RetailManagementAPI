@@ -62,5 +62,19 @@ namespace RetailAPI.Controllers
                 return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
             }
         }
+
+        [HttpGet("GetTotalSummaryByDay")]
+        public async Task<IActionResult> GetTotalSummaryByDay(DateTime date)
+        {
+            try
+            {
+                var summary = await _saleReportSerice.GetTotalSummaryByDay(date);
+                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful, Data = summary });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+            }
+        }
     }
 }

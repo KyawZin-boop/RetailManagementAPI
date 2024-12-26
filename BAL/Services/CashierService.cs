@@ -51,7 +51,8 @@ namespace BAL.Services
                         SellingPrice = product.Price,
                         ProfitPerItem = product.ProfitPerItem,
                         TotalPrice = product.Price * item.Quantity,
-                        TotalProfit = product.ProfitPerItem * item.Quantity
+                        TotalProfit = product.ProfitPerItem * item.Quantity,
+                        SaleDate = DateTime.UtcNow
                     });
                 }
                 await _unitOfWork.SaveChangesAsync();

@@ -101,5 +101,27 @@ namespace BAL.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<Summary> GetTotalSummaryByDay(DateTime date)
+        {
+            try
+            {
+                var saleReports = await _unitOfWork.SaleReport.GetByCondition(x => x.SaleDate == date.Date);
+                if (saleReports is null)
+                {
+                    throw new Exception("No sale reports found");
+                }
+                foreach (var report in saleReports)
+                {
+                    Summary.TotalProfit += report.TotalProfit;
+                    Summary.TotalRevenue += report.TotalPrice;
+                }
+                return Summary;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

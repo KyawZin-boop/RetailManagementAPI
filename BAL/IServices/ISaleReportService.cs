@@ -14,5 +14,6 @@ namespace BAL.IServices
         Task<IEnumerable<SaleReport>> GetSaleReport();
         Task<SaleReport> GetSaleReportById(Guid id);
         Task<Summary> GetTotalSummary();
+        Task<Summary> GetTotalSummaryByDay(DateTime date);
     }
 }

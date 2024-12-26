@@ -21,6 +21,7 @@ namespace Model.Entities
         public decimal ProfitPerItem { get; set; }
         public decimal TotalProfit { get; set; }
         public decimal TotalPrice { get; set; }
+        public DateTime? SaleDate { get; set; }
     }
 
     public class Summary
