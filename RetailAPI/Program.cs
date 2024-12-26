@@ -12,6 +12,7 @@ builder.Configuration.GetSection("AppSettings").Bind(appSettings);
 ServiceManager.SetServiceInfo(builder.Services, appSettings);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 

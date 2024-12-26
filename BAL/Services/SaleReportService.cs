@@ -91,7 +91,7 @@ namespace BAL.Services
 
                 foreach (var report in saleReports)
                 {
-                    Summary.TotalProfit += report.Profit;
+                    Summary.TotalProfit += report.TotalProfit;
                     Summary.TotalRevenue += report.TotalPrice;
                 }
                 return Summary;

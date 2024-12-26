@@ -10,8 +10,6 @@ namespace BAL.IServices
 {
     public interface ICashierService
     {
-        Task AddToCart(AddToCartDTO inputModel);
-        Task<IEnumerable<Cart>> GetCart();
-        Task FinalizeCart();
+        Task AddToCart(IEnumerable<AddToCartDTO> inputModel);
     }
 }

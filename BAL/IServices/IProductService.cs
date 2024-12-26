@@ -13,7 +13,7 @@ namespace BAL.IServices
         Task AddProduct(ProductDTO inputModel);
         Task DeleteProduct(DeleteProductDTO inputModel);
         Task UpdateProduct(UpdateProductDTO inputModel);
-        Task<IEnumerable<Product>> GetAllProducts();
+        Task<IEnumerable<ProductDTO>> GetAllProducts();
         Task<Product> GetProductById(Guid id);
         
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using BAL.IServices;
 using Model.DTO;
 using Model.Entities;
@@ -13,23 +14,27 @@ namespace BAL.Services
     internal class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public ProductService(IUnitOfWork unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProducts()
+        public async Task<IEnumerable<ProductDTO>> GetAllProducts()
         {
             try
             {
                 var products = await _unitOfWork.Product.GetByCondition(x => x.ActiveFlag);
+                
                 if (products is null)
                 {
                     throw new Exception("No products found");
                 }
+                var resproducts = _mapper.Map<IEnumerable<ProductDTO>>(products);
 
-                return products;
+                return resproducts;
             }
             catch (Exception ex)
             {

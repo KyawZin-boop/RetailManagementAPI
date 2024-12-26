@@ -21,39 +21,11 @@ namespace RetailAPI.Controllers
         }
 
         [HttpPost("AddToCart")]
-        public async Task<IActionResult> AddToCart(AddToCartDTO inputModel)
+        public async Task<IActionResult> AddToCart(IEnumerable<AddToCartDTO> inputModel)
         {
             try
             {
                 await _cashierService.AddToCart(inputModel);
-                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful });
-            }
-            catch (Exception ex)
-            {
-                return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
-            }
-        }
-
-        [HttpGet("GetCart")]
-        public async Task<IActionResult> GetCart()
-        {
-            try
-            {
-                var cart = await _cashierService.GetCart();
-                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful, Data = cart });
-            }
-            catch (Exception ex)
-            {
-                return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
-            }
-        }
-
-        [HttpPost("FinalizeCart")]
-        public async Task<IActionResult> FinalizeCart()
-        {
-            try
-            {
-                await _cashierService.FinalizeCart();
                 return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful });
             }
             catch (Exception ex)

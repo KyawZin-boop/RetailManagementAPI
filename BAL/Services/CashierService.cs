@@ -13,90 +13,47 @@ namespace BAL.Services
     internal class CashierService : ICashierService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private List<Cart> carts = new List<Cart>();
 
         public CashierService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddToCart(AddToCartDTO inputModel)
+        public async Task AddToCart(IEnumerable<AddToCartDTO> inputModel)
         {
             try
             {
-                var product = (await _unitOfWork.Product.GetByCondition(x => x.ProductCode == inputModel.ProductCode && x.ActiveFlag)).FirstOrDefault();
-                if (product is null)
+                foreach (var item in inputModel)
                 {
-                    throw new Exception("Product not found");
-                }
-
-                var cartItem = carts.FirstOrDefault(x => x.ProductCode == inputModel.ProductCode);
-                if(cartItem is null)
-                {
-                    var cart = new Cart
+                    if (item.Quantity <= 0)
                     {
-                        ProductCode = inputModel.ProductCode,
-                        ProductName = inputModel.ProductName,
-                        Quantity = inputModel.Quantity
-                    };
-                    carts.Add(cart);
-                }
-                else
-                {
-                    cartItem.Quantity += inputModel.Quantity;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+                        throw new Exception("Quantity must be greater than 0");
+                    }
 
-        public async Task<IEnumerable<Cart>> GetCart()
-        {
-            try
-            {
-                var lst = await _unitOfWork.Cart.GetAll();
-                if (lst is null)
-                {
-                    throw new Exception("No item in Cart");
-                }
-
-                return lst;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task FinalizeCart()
-        {
-            try
-            {
-                foreach (var cart in carts)
-                {
-                    var product = (await _unitOfWork.Product.GetByCondition(x => x.ProductCode == cart.ProductCode && x.ActiveFlag)).FirstOrDefault();
+                    var product = (await _unitOfWork.Product.GetByCondition(x => x.ProductCode == item.ProductCode && x.ActiveFlag)).FirstOrDefault();
                     if (product is null)
                     {
                         throw new Exception("Product not found");
                     }
 
-                    product.Stock -= cart.Quantity;
+                    if(product.Stock < item.Quantity)
+                    {
+                        throw new Exception("Not enough stock");
+                    }
+                    product.Stock -= item.Quantity;
                     _unitOfWork.Product.Update(product);
 
-                    var report = new SaleReport
+                    await _unitOfWork.SaleReport.Add(new SaleReport
                     {
                         ProductCode = product.ProductCode,
                         ProductName = product.Name,
-                        Quantity = cart.Quantity,
+                        Quantity = item.Quantity,
                         SellingPrice = product.Price,
-                        TotalPrice = product.Price * cart.Quantity,
-                        Profit = product.ProfitPerItem * cart.Quantity
-                    };
-                    await _unitOfWork.SaleReport.Add(report);
+                        ProfitPerItem = product.ProfitPerItem,
+                        TotalPrice = product.Price * item.Quantity,
+                        TotalProfit = product.ProfitPerItem * item.Quantity
+                    });
                 }
-                carts.Clear();
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
