@@ -21,28 +21,6 @@ namespace BAL.Services
             _unitOfWork = unitOfWork;
         }
 
-        //public async Task AddSaleReport(Product product, int Quantity)
-        //{
-        //    try
-        //    {
-        //        var saleReport = new SaleReport
-        //        {
-        //            ProductCode = product.ProductCode,
-        //            ProductName = product.Name,
-        //            Quantity = Quantity,
-        //            SellingPrice = product.Price,
-        //            TotalPrice = product.Price * Quantity,
-        //            Profit = product.ProfitPerItem * Quantity
-        //        };
-        //        await _unitOfWork.SaleReport.Add(saleReport);
-        //        await _unitOfWork.SaveChangesAsync();
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-
         public async Task<IEnumerable<SaleReport>> GetSaleReport()
         {
             try
@@ -106,7 +84,10 @@ namespace BAL.Services
         {
             try
             {
-                var saleReports = await _unitOfWork.SaleReport.GetByCondition(x => x.SaleDate == date.Date);
+                DateTime utcStart = date.Date.ToUniversalTime(); // Start of the day in UTC
+                DateTime utcEnd = date.Date.AddDays(1).AddTicks(-1).ToUniversalTime();
+
+                var saleReports = await _unitOfWork.SaleReport.GetByCondition(x => x.SaleDate >= utcStart && x.SaleDate <= utcEnd);
                 if (saleReports is null)
                 {
                     throw new Exception("No sale reports found");
