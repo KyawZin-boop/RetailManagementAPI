@@ -9,6 +9,5 @@ namespace Model.AppConfig
     public class AppSettings
     {
         public string? connectionString { get; set; }
-        public string? LocalTestUrl { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using Repository.UnitOfWork;
 namespace RetailAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/Cart")]
     [ApiController]
     public class AddToCartController : ControllerBase
     {

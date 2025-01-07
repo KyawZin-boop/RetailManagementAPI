@@ -32,7 +32,7 @@ namespace BAL.Services
                 {
                     throw new Exception("No products found");
                 }
-                var resproducts = _mapper.Map<IEnumerable<ProductDTO>>(products);
+                var resproducts = _mapper.Map<IEnumerable<ProductDTO>>(products).OrderBy(p => p.ProductCode);
 
                 return resproducts;
             }

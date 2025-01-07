@@ -35,13 +35,13 @@ namespace RetailAPI.Controllers
             }
         }
 
-        [HttpGet("GetSaleReportById")]
-        public async Task<IActionResult> GetSaleReportById(Guid id)
+        [HttpGet("GetSaleReportByDate")]
+        public async Task<IActionResult> GetSaleReportByDate(DateTime date)
         {
             try
             {
-                var report = await _saleReportSerice.GetSaleReportById(id);
-                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful, Data = report });
+                var reports = await _saleReportSerice.GetSaleReportByDate(date);
+                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful, Data = reports });
             }
             catch (Exception ex)
             {

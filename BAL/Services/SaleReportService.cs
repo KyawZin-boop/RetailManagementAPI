@@ -39,17 +39,20 @@ namespace BAL.Services
             }
         }
 
-        public async Task<SaleReport> GetSaleReportById(Guid id)
+        public async Task<IEnumerable<SaleReport>> GetSaleReportByDate(DateTime date)
         {
             try
             {
-                var saleReport = (await _unitOfWork.SaleReport.GetByCondition(x => x.SaleId == id)).FirstOrDefault();
-                if (saleReport is null)
+                DateTime utcStart = date.Date.ToUniversalTime(); // Start of the day in UTC
+                DateTime utcEnd = date.Date.AddDays(1).AddTicks(-1).ToUniversalTime();
+
+                var saleReports = await _unitOfWork.SaleReport.GetByCondition(x => x.SaleDate >= utcStart && x.SaleDate <= utcEnd);
+                if (saleReports is null)
                 {
                     throw new Exception("No sale reports found");
                 }
 
-                return saleReport;
+                return saleReports;
             }
             catch (Exception ex)
             {

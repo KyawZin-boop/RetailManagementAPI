@@ -12,7 +12,7 @@ namespace BAL.IServices
     {
         //Task AddSaleReport(SaleReportDTO inputModel);
         Task<IEnumerable<SaleReport>> GetSaleReport();
-        Task<SaleReport> GetSaleReportById(Guid id);
+        Task<IEnumerable<SaleReport>> GetSaleReportByDate(DateTime date);
         Task<Summary> GetTotalSummary();
         Task<Summary> GetTotalSummaryByDay(DateTime date);
     }
