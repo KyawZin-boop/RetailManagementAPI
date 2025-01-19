@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Model.AppConfig;
+using Model.DTO;
 using Repository.UnitOfWork;
 
 namespace RetailAPI.Controllers
@@ -41,6 +42,20 @@ namespace RetailAPI.Controllers
             try
             {
                 var reports = await _saleReportSerice.GetSaleReportByDate(date);
+                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful, Data = reports });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+            }
+        }
+
+        [HttpPost("GetSaleReportWithinRange")]
+        public async Task<IActionResult> GetSaleReportWithinRange(ReportDateDTO date)
+        {
+            try
+            {
+                var reports = await _saleReportSerice.GetSaleReportWithinRange(date);
                 return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful, Data = reports });
             }
             catch (Exception ex)

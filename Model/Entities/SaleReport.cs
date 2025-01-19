@@ -15,7 +15,8 @@ namespace Model.Entities
         [Key]
         public Guid SaleId { get; set; }
         public string ProductCode { get; set; }
-        public string ProductName { get; set; }
+        [Column("ProductName")]
+        public string Name { get; set; }
         public int Quantity { get; set; }
         public decimal SellingPrice { get; set; }
         public decimal ProfitPerItem { get; set; }

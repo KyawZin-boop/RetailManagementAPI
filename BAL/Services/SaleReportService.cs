@@ -25,7 +25,7 @@ namespace BAL.Services
         {
             try
             {
-                var saleReports = await _unitOfWork.SaleReport.GetAll();
+                var saleReports = (await _unitOfWork.SaleReport.GetAll()).OrderByDescending(x=> x.SaleDate);
                 if (saleReports is null)
                 {
                     throw new Exception("No sale reports found");
@@ -55,6 +55,24 @@ namespace BAL.Services
                 return saleReports;
             }
             catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<SaleReport>> GetSaleReportWithinRange(ReportDateDTO date)
+        {
+            try
+            {
+                var saleReports = await _unitOfWork.SaleReport.GetByCondition(x => x.SaleDate >= date.start && x.SaleDate <= date.end);
+                if(saleReports is null)
+                {
+                    throw new Exception("No sale reports found.");
+                }
+
+                return saleReports;
+            }
+            catch(Exception ex)
             {
                 throw ex;
             }

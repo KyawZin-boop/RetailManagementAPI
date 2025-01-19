@@ -33,7 +33,7 @@ namespace Model.DTO
     public class AddToCartDTO
     {
         public string ProductCode { get; set; }
-        public string ProductName { get; set; } 
+        public string Name { get; set; } 
         public int Quantity { get; set; }
     }
 }

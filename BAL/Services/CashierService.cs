@@ -46,7 +46,7 @@ namespace BAL.Services
                     await _unitOfWork.SaleReport.Add(new SaleReport
                     {
                         ProductCode = product.ProductCode,
-                        ProductName = product.Name,
+                        Name = product.Name,
                         Quantity = item.Quantity,
                         SellingPrice = product.Price,
                         ProfitPerItem = product.ProfitPerItem,

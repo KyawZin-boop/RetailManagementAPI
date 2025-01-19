@@ -16,5 +16,6 @@ namespace Repository.Repositories
         void Delete(T entity);
         void Update(T entity);
         Task<IEnumerable<T>> GetByCondition(Expression<Func<T, bool>> expression);
+        Task<IEnumerable<T>> GetByConditionWithPaginationByDesc<TKey>(Expression<Func<T, bool>> expression, int page, int pageSize, Expression<Func<T, TKey>> orderBy);
     }
 }

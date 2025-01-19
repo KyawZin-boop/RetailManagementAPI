@@ -35,6 +35,20 @@ namespace RetailAPI.Controllers
             }
         }
 
+        [HttpGet("GetByConditionWithPaginationByDesc")]
+        public async Task<IActionResult> GetByConditionWithPaginationByDesc(int page, int pageSize)
+        {
+            try
+            {
+                var products = await _productService.GetByConditionWithPaginationByDesc(page, pageSize);
+                return Ok(new ResponseModel { Message = "Success.", Status = APIStatus.Successful, Data = products });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.Error });
+            }
+        }
+
         [HttpGet("GetProductById")]
         public async Task<IActionResult> GetProductById(Guid id)
         {
@@ -55,7 +69,7 @@ namespace RetailAPI.Controllers
             try
             {
                 await _productService.AddProduct(inputModel);
-                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful });
+                return Ok(new ResponseModel { Message = "Successfully Added.", Status = APIStatus.Successful });
             }
             catch (Exception ex)
             {
@@ -69,7 +83,7 @@ namespace RetailAPI.Controllers
             try
             {
                 await _productService.DeleteProduct(inputModel);
-                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful });
+                return Ok(new ResponseModel { Message = "Successfully Deleted.", Status = APIStatus.Successful });
             }
             catch (Exception ex)
             {
@@ -83,7 +97,7 @@ namespace RetailAPI.Controllers
             try
             {
                 await _productService.UpdateProduct(inputModel);
-                return Ok(new ResponseModel { Message = "Success", Status = APIStatus.Successful });
+                return Ok(new ResponseModel { Message = "Successfully Updated.", Status = APIStatus.Successful });
             }
             catch (Exception ex)
             {

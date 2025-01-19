@@ -22,23 +22,38 @@ namespace BAL.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProducts()
         {
             try
             {
-                var products = await _unitOfWork.Product.GetByCondition(x => x.ActiveFlag);
+                var products = (await _unitOfWork.Product.GetByCondition(x => x.ActiveFlag)).OrderBy(x=>x.CreatedDate);
                 
                 if (products is null)
                 {
                     throw new Exception("No products found");
                 }
-                var resproducts = _mapper.Map<IEnumerable<ProductDTO>>(products).OrderBy(p => p.ProductCode);
+                //var resproducts = _mapper.Map<IEnumerable<ProductDTO>>(products).OrderBy(p => p.ProductCode);
 
-                return resproducts;
+                return products;
             }
             catch (Exception ex)
             {
                 
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetByConditionWithPaginationByDesc(int page, int pageSize)
+        {
+            try
+            {
+                var products = await _unitOfWork.Product.GetByConditionWithPaginationByDesc(x => x.ActiveFlag, page, pageSize, x => x.Name);
+                var resproducts = _mapper.Map<IEnumerable<ProductDTO>>(products);
+
+                return resproducts;
+            }
+            catch(Exception ex)
+            {
                 throw ex;
             }
         }
@@ -71,7 +86,8 @@ namespace BAL.Services
                     Name = inputModel.Name,
                     Price = inputModel.Price,
                     Stock = inputModel.Stock,
-                    ProfitPerItem = inputModel.ProfitPerItem
+                    ProfitPerItem = inputModel.ProfitPerItem,
+                    CreatedDate = DateTime.UtcNow
                 };
                 await _unitOfWork.Product.Add(product);
                 await _unitOfWork.SaveChangesAsync();
@@ -94,6 +110,7 @@ namespace BAL.Services
                 }
 
                 product.ActiveFlag = false;
+                product.UpdatedDate = DateTime.UtcNow;
                 _unitOfWork.Product.Update(product);
                 await _unitOfWork.SaveChangesAsync();
             }
@@ -118,6 +135,7 @@ namespace BAL.Services
                 product.Price = inputModel.Price;
                 product.Stock = inputModel.Stock;
                 product.ProfitPerItem = inputModel.ProfitPerItem;
+                product.UpdatedDate = DateTime.UtcNow;
 
                 _unitOfWork.Product.Update(product);
                 await _unitOfWork.SaveChangesAsync();

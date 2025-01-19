@@ -13,12 +13,14 @@ namespace Model.Entities
     public class Product
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string ProductCode { get; set; }
         public string Name { get; set; }
         public int Stock { get; set; }
         public decimal Price { get; set; }
         public decimal ProfitPerItem { get; set; }
+        public DateTime CreatedDate { get; set; } 
+        public DateTime? UpdatedDate { get; set; }
         public bool ActiveFlag { get; set; } = true;
     }
 }

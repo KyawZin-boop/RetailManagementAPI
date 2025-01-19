@@ -14,4 +14,10 @@ namespace Model.DTO
         public decimal SellingPrice { get; set; }
         public decimal Total { get; set; }
     }
+
+    public class ReportDateDTO
+    {
+        public DateTime start { get; set; }
+        public DateTime end { get; set; }
+    }
 }
