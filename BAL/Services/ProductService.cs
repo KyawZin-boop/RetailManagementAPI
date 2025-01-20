@@ -99,11 +99,11 @@ namespace BAL.Services
         }
 
 
-        public async Task DeleteProduct(DeleteProductDTO inputModel)
+        public async Task DeleteProduct(Guid id)
         {
             try
             {
-                var product = await _unitOfWork.Product.GetByGuid(inputModel.Id);
+                var product = await _unitOfWork.Product.GetByGuid(id);
                 if (product == null)
                 {
                     throw new Exception("Product not found");

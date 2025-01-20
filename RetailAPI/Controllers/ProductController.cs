@@ -78,11 +78,11 @@ namespace RetailAPI.Controllers
         }
 
         [HttpPost("DeleteProduct")]
-        public async Task<IActionResult> DeleteProduct(DeleteProductDTO inputModel)
+        public async Task<IActionResult> DeleteProduct(Guid id)
         {
             try
             {
-                await _productService.DeleteProduct(inputModel);
+                await _productService.DeleteProduct(id);
                 return Ok(new ResponseModel { Message = "Successfully Deleted.", Status = APIStatus.Successful });
             }
             catch (Exception ex)

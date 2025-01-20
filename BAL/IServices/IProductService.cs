@@ -11,7 +11,7 @@ namespace BAL.IServices
     public interface IProductService
     {
         Task AddProduct(ProductDTO inputModel);
-        Task DeleteProduct(DeleteProductDTO inputModel);
+        Task DeleteProduct(Guid id);
         Task UpdateProduct(UpdateProductDTO inputModel);
         Task<IEnumerable<Product>> GetAllProducts();
         Task<Product> GetProductById(Guid id);
