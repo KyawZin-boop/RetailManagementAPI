@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Model;
+using Model.AppConfig;
 
 namespace Repository.Repositories
 {
@@ -65,7 +66,7 @@ namespace Repository.Repositories
             return await _entities.Where(expression).ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> GetByConditionWithPaginationByDesc<TKey>(Expression<Func<T, bool>> expression, int page, int pageSize, Expression<Func<T, TKey>> orderBy)
+        public async Task<PaginatedResponseModel<T>> GetByConditionWithPaginationByDesc<TKey>(Expression<Func<T, bool>> expression, int page, int pageSize, Expression<Func<T, TKey>> orderBy)
         {
             if (expression == null)
             {
@@ -89,7 +90,43 @@ namespace Repository.Repositories
                 throw new InvalidOperationException($"Invalid page number. The page number should be between 1 and {totalPages}.");
             }
 
-            return await _entities.OrderByDescending(orderBy).Where(expression).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var lst = await _entities.OrderByDescending(orderBy).Where(expression).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return new PaginatedResponseModel<T>
+            {
+                Items = lst, 
+                TotalCount = totalCount, 
+                TotalPages = totalPages
+            };
+        }
+
+        public async Task<PaginatedResponseModel<T>> GetPaginationByDesc<TKey>(int page, int pageSize, Expression<Func<T, TKey>> orderBy)
+        {
+            if (page < 1 || pageSize <= 0)
+            {
+                throw new InvalidOperationException("PageError");
+            }
+
+            var totalCount = await _entities.CountAsync();
+            if (totalCount == 0)
+            {
+                return null;
+            }
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+            if (page > totalPages)
+            {
+                throw new InvalidOperationException($"Invalid page number. The page number should be between 1 and {totalPages}.");
+            }
+
+            var lst = await _entities.OrderByDescending(orderBy).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return new PaginatedResponseModel<T>
+            {
+                Items = lst,
+                TotalCount = totalCount,
+                TotalPages = totalPages
+            };
         }
     }
 }

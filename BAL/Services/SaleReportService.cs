@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BAL.IServices;
 using Model;
+using Model.AppConfig;
 using Model.DTO;
 using Model.Entities;
 using Repository.UnitOfWork;
@@ -53,6 +54,20 @@ namespace BAL.Services
                 }
 
                 return saleReports;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<PaginatedResponseModel<SaleReport>> GetPaginationByDesc(int page, int pageSize)
+        {
+            try
+            {
+                var records = await _unitOfWork.SaleReport.GetPaginationByDesc( page, pageSize, x => x.SaleDate);
+
+                return records;
             }
             catch (Exception ex)
             {

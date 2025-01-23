@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BAL.IServices;
+using Model.AppConfig;
 using Model.DTO;
 using Model.Entities;
 using Repository.UnitOfWork;
@@ -43,14 +44,15 @@ namespace BAL.Services
             }
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetByConditionWithPaginationByDesc(int page, int pageSize)
+
+        public async Task<PaginatedResponseModel<Product>> GetByConditionWithPaginationByDesc(int page, int pageSize)
         {
             try
             {
-                var products = await _unitOfWork.Product.GetByConditionWithPaginationByDesc(x => x.ActiveFlag, page, pageSize, x => x.Name);
-                var resproducts = _mapper.Map<IEnumerable<ProductDTO>>(products);
+                var products = await _unitOfWork.Product.GetByConditionWithPaginationByDesc(x => x.ActiveFlag, page, pageSize, x => x.CreatedDate);
+                //var resproducts = _mapper.Map<IEnumerable<ProductDTO>>(products);
 
-                return resproducts;
+                return products;
             }
             catch(Exception ex)
             {

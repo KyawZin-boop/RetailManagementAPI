@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Model.AppConfig;
 using Model.DTO;
 using Model.Entities;
 
@@ -16,5 +17,6 @@ namespace BAL.IServices
         Task<IEnumerable<SaleReport>> GetSaleReportWithinRange(ReportDateDTO date);
         Task<Summary> GetTotalSummary();
         Task<Summary> GetTotalSummaryByDay(DateTime date);
+        Task<PaginatedResponseModel<SaleReport>> GetPaginationByDesc(int page, int pageSize);
     }
 }

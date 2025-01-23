@@ -104,6 +104,19 @@ namespace RetailAPI.Controllers
                 return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.Error });
             }
         }
+
+        [HttpGet("GetAllProductWithPagination")]
+        public async Task<IActionResult> GetAllProductWithPagination(int page, int pageSize)
+        {
+            try
+            {
+                var data = await _productService.GetByConditionWithPaginationByDesc(page, pageSize);
+                return Ok(new ResponseModel { Message = "Successfully Updated.", Status = APIStatus.Successful, Data = data });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.Error });
+            }
+        }
     }
-    
 }
