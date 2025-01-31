@@ -23,11 +23,13 @@ namespace Repository.UnitOfWork
             Product = new ProductRepository(dataContext);
             Cart = new CartRepository(dataContext);
             SaleReport = new SaleReportRepository(dataContext);
+            User = new UserRepository(dataContext);
         }
 
         public IProductRepository Product { get; set; }
         public ISaleReportRepository SaleReport { get; set; }
         public ICartRepository Cart { get; set; }
+        public IUserRepository User { get; set; }
         public AppSettings AppSettings { get; set; }
 
         public void Dispose()

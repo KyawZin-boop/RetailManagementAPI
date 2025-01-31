@@ -12,6 +12,7 @@ namespace Repository.UnitOfWork
         IProductRepository Product { get; }
         ISaleReportRepository SaleReport { get; }
         ICartRepository Cart { get; }
+        IUserRepository User { get; }
         Task<int> SaveChangesAsync();
     }
 }

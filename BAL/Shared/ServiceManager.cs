@@ -12,6 +12,7 @@ using Model.AppConfig;
 using Repository.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Repository.Repositories.IRepositories;
+using BAL.Common;
 
 namespace BAL.Shared
 {
@@ -27,6 +28,8 @@ namespace BAL.Shared
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICashierService, CashierService>();
             services.AddScoped<ISaleReportService, SaleReportService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<TokenProvider, TokenProvider>();
         }
     }
 }

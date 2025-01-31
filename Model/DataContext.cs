@@ -19,5 +19,6 @@ namespace Model
 
         public DbSet<Product> Product { get; set; }
         public DbSet<SaleReport> SaleReport { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }

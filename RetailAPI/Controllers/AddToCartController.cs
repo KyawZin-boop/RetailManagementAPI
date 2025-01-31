@@ -1,4 +1,5 @@
 ﻿using BAL.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.AppConfig;
 using Model.DTO;
@@ -6,6 +7,7 @@ using Repository.UnitOfWork;
 
 namespace RetailAPI.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/Cart")]
     [ApiController]
