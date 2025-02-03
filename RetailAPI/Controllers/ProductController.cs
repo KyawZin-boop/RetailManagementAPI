@@ -37,6 +37,20 @@ namespace RetailAPI.Controllers
             }
         }
 
+        [HttpGet("GetProductBySearch")]
+        public async Task<IActionResult> GetProductBySearch(string search)
+        {
+            try
+            {
+                var result = await _productService.GetProductBySearch(search);
+                return Ok(new ResponseModel { Message = "Success.", Status = APIStatus.Successful, Data = result });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+            }
+        }
+
         [HttpGet("GetByConditionWithPaginationByDesc")]
         public async Task<IActionResult> GetByConditionWithPaginationByDesc(int page, int pageSize)
         {

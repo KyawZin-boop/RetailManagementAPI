@@ -27,8 +27,8 @@ namespace BAL.Services
         {
             try
             {
-                var products = (await _unitOfWork.Product.GetByCondition(x => x.ActiveFlag)).OrderBy(x=>x.CreatedDate);
-                
+                var products = (await _unitOfWork.Product.GetByCondition(x => x.ActiveFlag)).OrderBy(x => x.CreatedDate);
+
                 if (products is null)
                 {
                     throw new Exception("No products found");
@@ -39,11 +39,31 @@ namespace BAL.Services
             }
             catch (Exception ex)
             {
-                
+
                 throw ex;
             }
         }
 
+        public async Task<PaginatedResponseModel<Product>> GetProductBySearch(string requestModel)
+        {
+            try
+            {
+                var result = await _unitOfWork.Product.GetByCondition(x => x.Name.ToLower().Contains(requestModel.Trim().ToLower()));
+                var totalCount = result.Count();
+                var totalPages = (int)Math.Ceiling((double)totalCount / 10);
+
+                return new PaginatedResponseModel<Product>
+                {
+                    Items = result,
+                    TotalCount = totalCount,
+                    TotalPages = totalPages
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public async Task<PaginatedResponseModel<Product>> GetByConditionWithPaginationByDesc(int page, int pageSize)
         {
@@ -54,7 +74,7 @@ namespace BAL.Services
 
                 return products;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }

@@ -17,6 +17,6 @@ namespace BAL.IServices
         Task<IEnumerable<Product>> GetAllProducts();
         Task<Product> GetProductById(Guid id);
         Task<PaginatedResponseModel<Product>> GetByConditionWithPaginationByDesc(int page, int pageSize);
-
+        Task<PaginatedResponseModel<Product>> GetProductBySearch(string requestModel);
     }
 }
