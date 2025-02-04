@@ -107,5 +107,19 @@ namespace RetailAPI.Controllers
                 return Ok(new ResponseModel { Message = ex.Message, Status = APIStatus.Error });
             }
         }
+
+        [HttpGet("GetSaleReportBySearch")]
+        public async Task<IActionResult> GetSaleReportBySearch(DateTime date)
+        {
+            try
+            {
+                var data = await _saleReportSerice.GetSaleReportBySearch(date);
+                return Ok(new ResponseModel { Message = "Success.", Status = APIStatus.Successful, Data = data });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+            }
+        }
     }
 }

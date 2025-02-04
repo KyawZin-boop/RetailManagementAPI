@@ -18,5 +18,6 @@ namespace BAL.IServices
         Task<Summary> GetTotalSummary();
         Task<Summary> GetTotalSummaryByDay(DateTime date);
         Task<PaginatedResponseModel<SaleReport>> GetPaginationByDesc(int page, int pageSize);
+        Task<PaginatedResponseModel<SaleReport>> GetSaleReportBySearch(DateTime date);
     }
 }

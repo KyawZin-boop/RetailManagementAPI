@@ -93,6 +93,35 @@ namespace BAL.Services
             }
         }
 
+        public async Task<PaginatedResponseModel<SaleReport>> GetSaleReportBySearch(DateTime date)
+        {
+            try
+            {
+                DateTime utcStart = date.Date.ToUniversalTime(); // Start of the day in UTC
+                DateTime utcEnd = date.Date.AddDays(1).AddTicks(-1).ToUniversalTime();
+
+                var saleReports = await _unitOfWork.SaleReport.GetByCondition(x => x.SaleDate >= utcStart && x.SaleDate <= utcEnd);
+                if (saleReports is null)
+                {
+                    throw new Exception("No sale reports found");
+                }
+
+                var totalCount = saleReports.Count();
+                var totalPages = (int)Math.Ceiling((double)totalCount / 10);
+
+                return new PaginatedResponseModel<SaleReport>
+                {
+                    Items = saleReports,
+                    TotalCount = totalCount,
+                    TotalPages = totalPages,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<Summary> GetTotalSummary()
         {
             try
