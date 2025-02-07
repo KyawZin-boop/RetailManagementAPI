@@ -20,4 +20,10 @@ namespace Model.DTO
         public DateTime start { get; set; }
         public DateTime end { get; set; }
     }
+
+    public class TotalSaleProduct
+    {
+        public string ProductName { get; set; }
+        public int SaleCount { get; set; }
+    }
 }

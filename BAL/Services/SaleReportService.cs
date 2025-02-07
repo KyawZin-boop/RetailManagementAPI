@@ -122,6 +122,61 @@ namespace BAL.Services
             }
         }
 
+        public async Task<IEnumerable<TotalSaleProduct>> GetTotalSaleCountForEachProduct()
+        {
+            try
+            {
+                var reports = await _unitOfWork.SaleReport.GetAll();
+                var products = await _unitOfWork.Product.GetByCondition(x => x.ActiveFlag);
+                var total = (from product in products
+                            join report in reports on product.Name equals report.Name into saleGroup
+                            select new TotalSaleProduct
+                            {
+                                ProductName = product.Name,
+                                SaleCount = saleGroup.Sum(s => s.Quantity)
+                            }).ToList();
+
+                return total;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<TotalSaleProduct>> GetTotalSaleCountByDay(DateTime date)
+        {
+            try
+            {
+                DateTime utcStart = date.Date.ToUniversalTime(); // Start of the day in UTC
+                DateTime utcEnd = date.Date.AddDays(1).AddTicks(-1).ToUniversalTime();
+
+                var saleReports = await _unitOfWork.SaleReport.GetByCondition(x => x.SaleDate > utcStart && x.SaleDate <= utcEnd);
+                if (saleReports is null)
+                {
+                    throw new Exception("No sale reports found");
+                }
+
+                var products = await _unitOfWork.Product.GetByCondition(x => x.ActiveFlag);
+                var total = (from product in products
+                             join report in saleReports on product.Name equals report.Name
+                             group report by report.Name into saleGroup
+                             select new TotalSaleProduct
+                             {
+                                 ProductName = saleGroup.Key,
+                                 SaleCount = saleGroup.Sum(s => s.Quantity) 
+                             }).ToList();
+
+                return total;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public async Task<Summary> GetTotalSummary()
         {
             try

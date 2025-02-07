@@ -30,7 +30,7 @@ namespace BAL.Services
                         throw new Exception("Quantity must be greater than 0");
                     }
 
-                    var product = (await _unitOfWork.Product.GetByCondition(x => x.ProductCode == item.ProductCode && x.ActiveFlag)).FirstOrDefault();
+                    var product = (await _unitOfWork.Product.GetByCondition(x => x.Id == item.id && x.ActiveFlag)).FirstOrDefault();
                     if (product is null)
                     {
                         throw new Exception("Product not found");

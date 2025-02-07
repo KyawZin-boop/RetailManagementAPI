@@ -121,5 +121,33 @@ namespace RetailAPI.Controllers
                 return StatusCode(500, new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
             }
         }
+
+        [HttpGet("GetTotalSaleCountForEachProduct")]
+        public async Task<IActionResult> GetTotalSaleCountForEachProduct()
+        {
+            try
+            {
+                var data = await _saleReportSerice.GetTotalSaleCountForEachProduct();
+                return Ok(new ResponseModel { Message = "Success.", Status = APIStatus.Successful, Data = data });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+            }
+        }
+
+        [HttpGet("GetTotalSaleCountByDay")]
+        public async Task<IActionResult> GetTotalSaleCountByDay(DateTime date)
+        {
+            try
+            {
+                var data = await _saleReportSerice.GetTotalSaleCountByDay(date);
+                return Ok(new ResponseModel { Message = "Success.", Status = APIStatus.Successful, Data = data });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel { Message = ex.Message, Status = APIStatus.SystemError });
+            }
+        }
     }
 }

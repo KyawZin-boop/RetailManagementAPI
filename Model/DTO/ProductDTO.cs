@@ -32,6 +32,7 @@ namespace Model.DTO
 
     public class AddToCartDTO
     {
+        public Guid id { get; set; }
         public string ProductCode { get; set; }
         public string Name { get; set; } 
         public int Quantity { get; set; }
